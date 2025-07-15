@@ -2,19 +2,17 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// Serve static files from the frontend repo
-const frontendPath = process.env.FRONTEND_PATH || 
-                    path.join(__dirname, '../frontend-repo/public');
+// Serve static files from /public
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(express.static(frontendPath));
-
-// Handle all routes
+// Handle all routes - Mobile SPA support
 app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
+// Start server
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`Serving files from: ${frontendPath}`);
+  console.log(`Serving from: ${path.join(__dirname, 'public')}`);
 });
